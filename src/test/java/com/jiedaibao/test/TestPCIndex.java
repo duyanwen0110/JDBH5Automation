@@ -2,6 +2,7 @@ package com.jiedaibao.test;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -13,7 +14,7 @@ public class TestPCIndex {
 	CommonHeaderPage commonHeaderPage;
 
 	@BeforeMethod
-	public void init() {
+	public void beforMethod() {
 //		System.setProperty("webdriver.firefox.bin",
 //				"D:/work/programFiles/firefox/firefox.exe");
 		driver = new FirefoxDriver();
@@ -30,7 +31,6 @@ public class TestPCIndex {
 		pcIndexPage.verifyDownloadButton();
 		pcIndexPage.verifyVideoButton();
 		pcIndexPage.verifyGotoQiyeButton();
-		driver.close();
 	}
 	
 	@Test(description="首页的功能介绍验证")
@@ -38,6 +38,10 @@ public class TestPCIndex {
 		PcIndexPage pcIndexPage = commonHeaderPage.gotoPcIndexPage();
 		pcIndexPage.verifySweepQRCodeDownload();
 		pcIndexPage.verifyDownloadBySystem();
-		driver.close();
+	}
+	
+	@AfterMethod
+	public void afterMethod(){
+		commonHeaderPage.closeDriver();
 	}
 }

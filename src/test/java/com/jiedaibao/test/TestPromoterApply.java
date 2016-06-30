@@ -3,6 +3,7 @@ package com.jiedaibao.test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -19,7 +20,7 @@ public class TestPromoterApply {
 	
 
 	@BeforeMethod
-	public void init() {
+	public void beforMethod() {
 		driver = new FirefoxDriver();
 		driver.manage().window().maximize();
 		String url = "http://www.jiedaibao.com";
@@ -29,24 +30,22 @@ public class TestPromoterApply {
 		commonHeaderPage = new CommonHeaderPage(driver);
 	}
 
-	//@Test(description = "申请为推广商个人版")
+	@Test(description = "申请为推广商个人版")
 	public void testPersonPromoterApply() throws Exception {
 		opromoterBean = new OpromoterBean("tester", "612657189910110389",
 				"19100000012", "test@jiedaibao.com", "北京", "沙河", "cooperSource");
 		opromoterApplyPage = commonHeaderPage.gotoOpromoterApplyPage();
 		opromoterApplyPage.applyForPersonOpromoter(opromoterBean);
-		// opromoterApplyPage.clickSubmitButton();
-		commonHeaderPage.closeDriver();
+		//opromoterApplyPage.clickSubmitButton();
 	}
 	
-	//@Test(description = "申请为推广商企业版")
+	@Test(description = "申请为推广商企业版")
 	public void testCompanyPromoterApply() throws Exception {
 		opromoterBean = new OpromoterBean("tester", "612657189910110389",
 				"19100000012", "test@jiedaibao.com", "北京", "沙河", "cooperSource");
 		opromoterApplyPage = commonHeaderPage.gotoOpromoterApplyPage();
 		opromoterApplyPage.applyForCompanyOpromoter(opromoterBean);
 		// opromoterApplyPage.clickSubmitButton();
-		commonHeaderPage.closeDriver();
 	}
 	
 	@Test(description="个人版企业版连接")
@@ -55,6 +54,12 @@ public class TestPromoterApply {
 		opromoterApplyPage.clickPersonOpromoterLink();
 		navigation.back();
 		opromoterApplyPage.clickCompanyOpromoterLink();
+	}
+	
+	@AfterMethod
+	public void afterMethod(){
 		commonHeaderPage.closeDriver();
 	}
+	
+	
 }

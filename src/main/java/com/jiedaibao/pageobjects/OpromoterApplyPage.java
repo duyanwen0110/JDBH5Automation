@@ -3,11 +3,11 @@ package com.jiedaibao.pageobjects;
 import java.util.List;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
 import com.jiedaibao.beans.OpromoterBean;
 import com.jiedaibao.utils.Snapshot;
 import com.jiedaibao.utils.WaitTool;
@@ -56,22 +56,23 @@ public class OpromoterApplyPage {
 	@FindBy(css="#typeText")
 	private WebElement typeTextLabel;
 	
+	@FindBy(css=".blue_toast")
+	private WebElement sucessToastLabel;
+	
 	private WebDriver driver;
 	private WaitTool waitTool;
-	private Snapshot snapshot;
 	
 	public OpromoterApplyPage(WebDriver driver){
 		PageFactory.initElements(driver, this);
 		this.driver = driver;
 		waitTool = new WaitTool();
 		waitTool.waitElement(driver, submitButton);
-		snapshot = new Snapshot();
 	}
 	
 	public void applyForPersonOpromoter(OpromoterBean opromoter)throws Exception{
 		personRadioButton.click();
 		fillOpromoterInformation(opromoter);
-		snapshot.getSnapshot((TakesScreenshot)driver, "applyForPersonOpromoter.png");
+		Snapshot.createScreenshots(driver);
 	}
 	
 	
@@ -79,7 +80,7 @@ public class OpromoterApplyPage {
 		companyRadioButton.click();
 		fillOpromoterInformation(opromoter);
 		Thread.sleep(1000);
-		snapshot.getSnapshot((TakesScreenshot)driver, "applyForCompanyOpromoter.png");
+		Snapshot.createScreenshots(driver);
 	}
 	
     public void fillOpromoterInformation(OpromoterBean opromoter) throws Exception{
@@ -89,12 +90,22 @@ public class OpromoterApplyPage {
     	if(!opromoter.getIdCardNo().equals("") || opromoter.getIdCardNo()!=null){
     		IdCardNoTextFiled.sendKeys(opromoter.getIdCardNo());
     	}
-    	telePhoneNoTextFiled.sendKeys(opromoter.getTelePhoneNo());
-    	emailTextFiled.sendKeys(opromoter.getEmail());
+    	if(!opromoter.getTelePhoneNo().equals("") || opromoter.getTelePhoneNo()!=null){
+    		telePhoneNoTextFiled.sendKeys(opromoter.getTelePhoneNo());
+    	}
+    	if(!opromoter.getEmail().equals("") || opromoter.getEmail()!=null){
+    		emailTextFiled.sendKeys(opromoter.getEmail());
+    	}
         ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView()", emailTextFiled);
-    	selectProvinceByLabel(opromoter.getProvince());
-    	cityTextFiled.sendKeys(opromoter.getCity());
-    	cooperSourceTextFiled.sendKeys(opromoter.getCooperSource());
+    	if(!opromoter.getProvince().equals("") || opromoter.getProvince()!=null){
+    		selectProvinceByLabel(opromoter.getProvince());
+    	}
+    	if(!opromoter.getCity().equals("") || opromoter.getCity()!=null){
+    		cityTextFiled.sendKeys(opromoter.getCity());
+    	}
+    	if(!opromoter.getCooperSource().equals("") || opromoter.getCooperSource()!=null){
+    		cooperSourceTextFiled.sendKeys(opromoter.getCooperSource());
+    	}
 	}
 	
     public void selectProvinceByLabel(String option) throws Exception{
@@ -109,19 +120,22 @@ public class OpromoterApplyPage {
     	throw new Exception("The expected option is not listed in select list options");
     }
     
-	public void clickSubmitButton(){
+	public void clickSubmitButton() throws InterruptedException{
 		submitButton.click();
+		//Thread.sleep(3000);
+		waitTool.waitElement(driver, sucessToastLabel);
+		Snapshot.createScreenshots(driver);
 	}
 	
 	public void clickPersonOpromoterLink(){
 		personOpromoterLink.click();
 		waitTool.waitElement(driver, typeTextLabel);
-		snapshot.getSnapshot((TakesScreenshot)driver, "clickPersonOpromoterLink.png");
+		Snapshot.createScreenshots(driver);
 	}
 	
 	public void clickCompanyOpromoterLink(){
 		companyOpromoterLink.click();
 		waitTool.waitElement(driver, typeTextLabel);
-		snapshot.getSnapshot((TakesScreenshot)driver, "clickCompanyOpromoterLink.png");
+		Snapshot.createScreenshots(driver);
 	}
 }

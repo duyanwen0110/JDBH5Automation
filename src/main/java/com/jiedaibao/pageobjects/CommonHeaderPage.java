@@ -5,10 +5,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.jiedaibao.utils.Snapshot;
 import com.jiedaibao.utils.WaitTool;
 
 
 public class CommonHeaderPage{
+
 	@FindBy(css = "#common-header a[href*='pcIndex']")
 	private WebElement pcIndexLink;
 	
@@ -51,6 +53,7 @@ public class CommonHeaderPage{
 	}
 	
 	public OpromoterApplyPage gotoOpromoterApplyPage(){
+		Snapshot.createScreenshots(driver);
 		promoterApplyLink.click();
 		return new OpromoterApplyPage(driver);
 	}
